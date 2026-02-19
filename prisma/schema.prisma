@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Clube {
+  id        String   @id @default(uuid())
+  nome      String
+  createdAt DateTime @default(now())
+
+  usuarios       User[]
+  classes        Classe[]
+  desbravadores  Desbravador[]   // ✅ RELAÇÃO INVERSA ADICIONADA
+}
+
+model User {
+  id        String   @id @default(uuid())
+  nome      String
+  email     String   @unique
+  senha     String
+  role      String   // ADMIN | DIRETOR | INSTRUTOR
+  createdAt DateTime @default(now())
+
+  clubeId   String
+  clube     Clube   @relation(fields: [clubeId], references: [id])
+
+  classesComoInstrutor Classe[] @relation("InstrutorDaClasse")
+}
+
+model Desbravador {
+  id        String   @id @default(uuid())
+  nome      String
+  dataNascimento DateTime
+  createdAt DateTime @default(now())
+
+  clubeId   String
+  clube     Clube   @relation(fields: [clubeId], references: [id])
+
+  classeId  String?
+  classe    Classe? @relation(fields: [classeId], references: [id])
+
+  progressos Progresso[]
+}
+
+model Classe {
+  id        String   @id @default(uuid())
+  nome      String
+  createdAt DateTime @default(now())
+
+  clubeId   String
+  clube     Clube    @relation(fields: [clubeId], references: [id])
+
+  instrutorId String?
+  instrutor   User?  @relation("InstrutorDaClasse", fields: [instrutorId], references: [id])
+
+  requisitos Requisito[]
+  desbravadores Desbravador[]
+}
+
+model Requisito {
+  id        String   @id @default(uuid())
+  titulo    String
+  descricao String?
+  createdAt DateTime @default(now())
+
+  classeId  String
+  classe    Classe   @relation(fields: [classeId], references: [id])
+
+  progressos Progresso[]   // ✅ RELAÇÃO INVERSA ADICIONADA
+}
+
+model Progresso {
+  id            String   @id @default(uuid())
+  concluido     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  desbravadorId String
+  desbravador   Desbravador @relation(fields: [desbravadorId], references: [id])
+
+  requisitoId   String
+  requisito     Requisito   @relation(fields: [requisitoId], references: [id])
+
+  @@unique([desbravadorId, requisitoId])
+}
