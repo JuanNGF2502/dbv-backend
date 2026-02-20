@@ -1,6 +1,7 @@
 import express from "express";
 import routes from "./routes";
 import dotenv from "dotenv";
+import prisma from "./config/prisma";
 
 dotenv.config();
 
@@ -12,3 +13,17 @@ app.use(routes);
 app.listen(3000, () => {
   console.log("🚀 Server rodando na porta 3000");
 });
+
+
+app.get("/seed", async (req, res) => {
+  await prisma.user.create({
+    data: {
+      nome: "Admin",
+      email: "admin@dbv.com",
+      senha: "123456",
+      role: "ADMIN",
+      clubeId: "1",
+    }
+  })
+  res.send("Admin criado")
+})
