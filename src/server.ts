@@ -9,6 +9,10 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/debug", (req, res) => {
+  res.send("DEPLOY NOVO FUNCIONANDO");
+});
+
 // ✅ ROTA SEED PRIMEIRO
 app.get("/seed", async (req, res) => {
   await prisma.user.create({
