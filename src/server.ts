@@ -14,42 +14,34 @@ app.get("/debug", (req, res) => {
 });
 
 // ✅ ROTA SEED PRIMEIRO
+import bcrypt from "bcryptjs";
+
 app.get("/seed", async (req, res) => {
   try {
-    // Verifica se já existe admin
-    const existing = await prisma.user.findUnique({
-      where: { email: "admin@dbv.com" }
-    });
+    const hashedPassword = await bcrypt.hash("123456", 10);
 
-    if (existing) {
-      return res.json({ message: "Admin já existe" });
-    }
-
-    // Cria clube primeiro
     const clube = await prisma.clube.create({
-      data: {
-        nome: "Clube Central"
-      }
+      data: { nome: "Clube Central" }
     });
 
-    // Agora cria admin vinculado ao clube criado
     const user = await prisma.user.create({
       data: {
         nome: "Admin",
         email: "admin@dbv.com",
-        senha: "123456",
+        senha: hashedPassword,
         role: "ADMIN",
         clubeId: clube.id
       }
     });
 
-    return res.json({ message: "Admin criado", user });
+    res.json(user);
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Erro ao criar seed" });
+    res.status(500).json({ error: "Erro ao criar seed" });
   }
 });
+
 
 
 
