@@ -12,13 +12,14 @@
     "postinstall": "prisma generate"
   },
   "prisma": {
-  "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.2.2",
@@ -39,5 +40,4 @@
     "react-native-safe-area-context": "^5.6.2",
     "zod": "^4.3.6"
   }
-  
 }
