@@ -1,55 +1,68 @@
-import express from "express";
-import routes from "./routes";
-import dotenv from "dotenv";
-import prisma from "./config/prisma";
+import bcrypt from "bcrypt";
+import { PrismaClient } from "@prisma/client";
 
-dotenv.config();
-
-const app = express();
-
-app.use(express.json());
-
-app.get("/debug", (req, res) => {
-  res.send("DEPLOY NOVO FUNCIONANDO");
-});
-
-// ✅ ROTA SEED PRIMEIRO
-import bcrypt from "bcryptjs";
+const prisma = new PrismaClient();
 
 app.get("/seed", async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash("123456", 10);
+    // 🔥 Limpar banco
+    await prisma.progresso.deleteMany();
+    await prisma.requisito.deleteMany();
+    await prisma.desbravador.deleteMany();
+    await prisma.classe.deleteMany();
+    await prisma.user.deleteMany();
+    await prisma.clube.deleteMany();
 
+    // 🏕 Criar clube
     const clube = await prisma.clube.create({
-      data: { nome: "Clube Central" }
+      data: { nome: "Clube Teste MVP" },
     });
 
-    const user = await prisma.user.create({
+    // 🔐 Criar admin com senha hash
+    const senhaHash = await bcrypt.hash("123456", 10);
+
+    await prisma.user.create({
       data: {
-        nome: "Admin",
+        nome: "Admin Geral",
         email: "admin@dbv.com",
-        senha: hashedPassword,
+        senha: senhaHash,
         role: "ADMIN",
-        clubeId: clube.id
-      }
+        clubeId: clube.id,
+      },
     });
 
-    res.json(user);
+    // 📚 Criar classes
+    const classesData = [
+      { nome: "Amigo" },
+      { nome: "Companheiro" },
+      { nome: "Pesquisador" },
+      { nome: "Pioneiro" },
+      { nome: "Excursionista" },
+      { nome: "Guia" },
+    ];
+
+    for (const classeData of classesData) {
+      await prisma.classe.create({
+        data: {
+          nome: classeData.nome,
+          clubeId: clube.id,
+        },
+      });
+    }
+
+    res.json({
+      message: "🌱 Seed executado com sucesso!",
+      login: {
+        email: "admin@dbv.com",
+        senha: "123456",
+      },
+    });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Erro ao criar seed" });
+    res.status(500).json({
+      error: "Erro ao criar seed",
+      detalhe: error instanceof Error ? error.message : error,
+    });
   }
-});
-
-
-
-
-
-
-// ✅ DEPOIS as rotas normais
-app.use(routes);
-
-app.listen(3000, () => {
-  console.log("🚀 Server rodando na porta 3000");
 });
