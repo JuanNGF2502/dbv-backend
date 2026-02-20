@@ -1,9 +1,19 @@
+import express, { Request, Response } from "express";
+import cors from "cors";
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 
+const app = express();
 const prisma = new PrismaClient();
 
-app.get("/seed", async (req, res) => {
+app.use(cors());
+app.use(express.json());
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("🚀 API DBV rodando");
+});
+
+app.get("/seed", async (req: Request, res: Response) => {
   try {
     // 🔥 Limpar banco
     await prisma.progresso.deleteMany();
@@ -65,4 +75,10 @@ app.get("/seed", async (req, res) => {
       detalhe: error instanceof Error ? error.message : error,
     });
   }
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`🔥 Server rodando na porta ${PORT}`);
 });
