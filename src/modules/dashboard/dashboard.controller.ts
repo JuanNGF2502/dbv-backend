@@ -1,13 +1,16 @@
 import { Request, Response } from "express";
 import { DashboardService } from "./dashboard.service";
 import prisma from "../../config/prisma";
+import { getParam } from "../../utils/param";
 
 const service = new DashboardService();
 
 export class DashboardController {
   async progressoClasse(req: Request, res: Response) {
+    const id = getParam(req.params.id);
+
     try {
-      const result = await service.progressoClasse(req.params.id);
+      const result = await service.progressoClasse(id);
       return res.json(result);
     } catch (error: any) {
       return res.status(400).json({ error: error.message });
@@ -16,7 +19,7 @@ export class DashboardController {
 
   async index(req: Request, res: Response) {
     try {
-      const user = req.user;
+      const user = req.user!;
       if (!user || !user.clubeId) {
         return res.status(400).json({ error: "Usuário não autenticado ou sem clube" });
       }
@@ -43,18 +46,18 @@ export class DashboardController {
       const mediaProgresso = countComProgresso > 0 ? somaPercentual / countComProgresso : 0;
 
       const ultimosProgressos = await prisma.progresso.findMany({
-  where: { desbravador: { clubeId } },
-  orderBy: { createdAt: 'desc' }, // ANTES: atualizadoEm
-  take: 5,
-  include: { desbravador: true, requisito: true }
-});
+        where: { desbravador: { clubeId } },
+        orderBy: { createdAt: 'desc' }, // ANTES: atualizadoEm
+        take: 5,
+        include: { desbravador: true, requisito: true }
+      });
 
       const atividades = ultimosProgressos.map(p => ({
-  id: p.id,
-  desbravadorNome: p.desbravador?.nome || 'Desconhecido',
-  requisitoDescricao: p.requisito?.descricao || '',
-  data: p.createdAt // alterado
-}));
+        id: p.id,
+        desbravadorNome: p.desbravador?.nome || 'Desconhecido',
+        requisitoDescricao: p.requisito?.descricao || '',
+        data: p.createdAt // alterado
+      }));
 
       return res.json({
         totalDesbravadores,

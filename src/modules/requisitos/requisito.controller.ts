@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
 import { RequisitoService } from "./requisito.service";
+import { getParam } from "../../utils/param";
 
 const service = new RequisitoService();
 
 export class RequisitoController {
   async listarPorClasse(req: Request, res: Response) {
+    const classeId = getParam(req.params.classeId);
     try {
-      const result = await service.listarPorClasse(req.params.classeId, req.user);
+      const result = await service.listarPorClasse(classeId, req.user!);
       return res.json(result);
     } catch (error: any) {
       return res.status(400).json({ error: error.message });
@@ -15,7 +17,7 @@ export class RequisitoController {
 
   async create(req: Request, res: Response) {
     try {
-      const result = await service.create(req.body, req.user);
+      const result = await service.create(req.body, req.user!);
       return res.json(result);
     } catch (error: any) {
       return res.status(400).json({ error: error.message });
@@ -23,22 +25,35 @@ export class RequisitoController {
   }
 
   async update(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const result = await service.update(id, req.body, req.user);
-      return res.json(result);
-    } catch (error: any) {
-      return res.status(400).json({ error: error.message });
-    }
+  try {
+    const id = getParam(req.params.id);
+
+    const result = await service.update(
+      id,
+      req.body,
+      req.user!
+    );
+
+    return res.json(result);
+  } catch (error: any) {
+    return res.status(400).json({ error: error.message });
   }
+}
+
 
   async delete(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const result = await service.delete(id, req.user);
-      return res.json(result);
-    } catch (error: any) {
-      return res.status(400).json({ error: error.message });
-    }
+  try {
+    const id = getParam(req.params.id);
+
+    const result = await service.delete(
+      id,
+      req.user!
+    );
+
+    return res.json(result);
+  } catch (error: any) {
+    return res.status(400).json({ error: error.message });
   }
+}
+
 }

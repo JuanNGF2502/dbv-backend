@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { DesbravadorService } from "./desbravador.service";
+import { getParam } from "../../utils/param";
 
 const service = new DesbravadorService();
 
@@ -14,8 +15,10 @@ export class DesbravadorController {
   }
 
   async detalhar(req: Request, res: Response) {
+    const id = getParam(req.params.id);
+
     try {
-      const result = await service.detalhar(req.params.id, req.user);
+      const result = await service.detalhar(id, req.user);
       return res.json(result);
     } catch (err: any) {
       return res.status(400).json({ error: err.message });
@@ -32,13 +35,19 @@ export class DesbravadorController {
   }
 
   async atualizarProgresso(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const { concluido } = req.body;
-      const result = await service.atualizarProgresso(id, concluido);
-      return res.json(result);
-    } catch (err: any) {
-      return res.status(400).json({ error: err.message });
-    }
+  try {
+    const id = getParam(req.params.id);
+    const { concluido } = req.body;
+
+    const result = await service.atualizarProgresso(
+      id,
+      concluido
+    );
+
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message });
   }
+}
+
 }
