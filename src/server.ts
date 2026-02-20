@@ -15,18 +15,45 @@ app.get("/debug", (req, res) => {
 
 // ✅ ROTA SEED PRIMEIRO
 app.get("/seed", async (req, res) => {
-  await prisma.user.create({
-    data: {
-      nome: "Admin",
-      email: "admin@dbv.com",
-      senha: "123456",
-      role: "ADMIN",
-      clubeId: "1",
-    }
-  });
+  try {
+    // Verifica se já existe admin
+    const existing = await prisma.user.findUnique({
+      where: { email: "admin@dbv.com" }
+    });
 
-  res.send("Admin criado");
+    if (existing) {
+      return res.json({ message: "Admin já existe" });
+    }
+
+    // Cria clube primeiro
+    const clube = await prisma.clube.create({
+      data: {
+        nome: "Clube Central"
+      }
+    });
+
+    // Agora cria admin vinculado ao clube criado
+    const user = await prisma.user.create({
+      data: {
+        nome: "Admin",
+        email: "admin@dbv.com",
+        senha: "123456",
+        role: "ADMIN",
+        clubeId: clube.id
+      }
+    });
+
+    return res.json({ message: "Admin criado", user });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro ao criar seed" });
+  }
 });
+
+
+
+
 
 // ✅ DEPOIS as rotas normais
 app.use(routes);
