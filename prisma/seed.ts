@@ -113,7 +113,7 @@ async function main() {
           ]
         },
         {
-          titulo: "Classe Avançada - Amigo da Natureza",
+          titulo: "Amigo da Natureza",
           itens: [
         "1. Memorizar, cantar ou tocar o Hino dos Desbravadores e conhecer a história do hino.",
             "2. Em consulta com o seu líder, escolher um dos seguintes personagens do Antigo Testamento e conversar com seu grupo sobre o amor e cuidado de Deus e o livramento demonstrado na vida do personagem escolhido: José, Jonas, Ester, Rute.",
@@ -209,7 +209,7 @@ async function main() {
           ]
         },
         {
-          titulo: "Classe Avançada - Companheiro de Excursionismo",
+          titulo: "Companheiro de Excursionismo",
           itens: [
             "1. Aprender e demonstrar a composição, significado e uso correto da Bandeira Nacional.",
             "2. Ler a primeira visão de Ellen White e discutir como Deus usa os profetas para apresentar Sua mensagem à igreja (ver 'Primeiros Escritos', pág. 13-20).",
@@ -305,7 +305,7 @@ async function main() {
           ]
         },
         {
-          titulo: "Classe Avançada - Pesquisador de Campo e Bosque",
+          titulo: "Pesquisador de Campo e Bosque",
           itens: [
             "1. Conhecer e saber usar de forma adequada a Bandeira dos Desbravadores, o bandeirim de unidade e os comandos de ordem unida.",
             "2. Ler a história de J. N. Andrews ou um pioneiro de seu país e discutir a importância do trabalho de missionários, e porque Cristo ordenou a Grande Comissão (Mateus 28:18-20).",
@@ -401,7 +401,7 @@ async function main() {
       ]
     },
     {
-      titulo: "Classe Avançada - Pioneiro de Novas Fronteiras",
+      titulo: "Pioneiro de Novas Fronteiras",
       itens: [
         "1. Completar a especialidade de Cidadania Cristã, caso não tenha sido realizada anteriormente.",
         "2. Encenar a história do bom samaritano, demonstrando como ajudar as pessoas e auxiliar de forma prática três pessoas ou mais.",
@@ -498,7 +498,7 @@ async function main() {
       ]
     },
     {
-      titulo: "Classe Avançada - Excursionista na Mata",
+      titulo: "Excursionista na Mata",
       itens: [
         "1. Fazer uma apresentação escrita ou falada sobre o respeito que devemos ter com a Lei de Deus e as autoridades civis, enumerando pelo menos 10 princípios de comportamento moral.",
         "2. Acompanhar seu pastor ou ancião em uma visita missionária ou estudo bíblico.",
@@ -598,7 +598,7 @@ async function main() {
       ]
     },
     {
-      titulo: "Classe Avançada - Guia de Exploração",
+      titulo: "Guia de Exploração",
       itens: [
         "1. Completar a especialidade de Mordomia.",
         "2. Ler o livro 'O maior discurso de Cristo' e escrever uma página sobre o efeito da leitura em sua vida.",

@@ -8,13 +8,8 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(routes);
 
-app.listen(3000, () => {
-  console.log("🚀 Server rodando na porta 3000");
-});
-
-
+// ✅ ROTA SEED PRIMEIRO
 app.get("/seed", async (req, res) => {
   await prisma.user.create({
     data: {
@@ -24,6 +19,14 @@ app.get("/seed", async (req, res) => {
       role: "ADMIN",
       clubeId: "1",
     }
-  })
-  res.send("Admin criado")
-})
+  });
+
+  res.send("Admin criado");
+});
+
+// ✅ DEPOIS as rotas normais
+app.use(routes);
+
+app.listen(3000, () => {
+  console.log("🚀 Server rodando na porta 3000");
+});
